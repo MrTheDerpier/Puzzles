@@ -15,6 +15,7 @@ const SOURCES = {
 };
 const DIFFICULTIES = [{ label: '4 pieces', rows: 2, cols: 2 }, { label: '9 pieces', rows: 3, cols: 3 }, { label: '16 pieces', rows: 4, cols: 4 }, { label: '25 pieces', rows: 5, cols: 5 }];
 const $ = id => document.getElementById(id);
+const BASE = new URL('.', document.baseURI).href;
 let source = 'nasa', selected = SOURCES.nasa.images[0], difficulty = DIFFICULTIES[1], pieces = [], dragged = null, deferredPrompt = null;
 function shuffle(items) { const arr = [...items]; for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
 function renderSetup() {
@@ -58,5 +59,5 @@ $('difficultySelect').addEventListener('change', e => difficulty = DIFFICULTIES.
 $('startButton').addEventListener('click', () => start()); $('shuffleButton').addEventListener('click', () => start()); $('picturesButton').addEventListener('click', () => { $('play').classList.add('hidden'); $('setup').classList.remove('hidden'); });
 $('settingsButton').addEventListener('click', () => $('modal').classList.remove('hidden')); $('closeModal').addEventListener('click', () => $('modal').classList.add('hidden')); $('generateButton').addEventListener('click', generateWithGemini); $('geminiKey').value = localStorage.getItem('geminiKey') || '';
 window.addEventListener('beforeinstallprompt', event => { event.preventDefault(); deferredPrompt = event; $('installButton').classList.remove('hidden'); }); $('installButton').addEventListener('click', () => deferredPrompt?.prompt());
-if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register(new URL('sw.js', BASE)));
 renderSetup();
