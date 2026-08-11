@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#7c3aed" />
+    <meta name="description" content="A simple mobile-friendly jigsaw puzzle game with public domain image sources and optional Gemini prompt generation." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="icons/icon-192.svg" />
+    <link rel="stylesheet" href="src/styles.css" />
+    <title>Pocket Puzzles</title>
+  </head>
+  <body>
+    <main class="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Pocket Puzzles</p>
+          <h1>Pick a picture. Make a puzzle.</h1>
+          <p>Big buttons, calm colors, and simple play for a quick relaxing break.</p>
+        </div>
+        <button id="settingsButton" class="iconButton" aria-label="Open advanced settings">⚙️</button>
+      </header>
+
+      <section id="setup" class="card stack">
+        <label class="field"><span>Image source</span><select id="sourceSelect"></select></label>
+        <p id="sourceNote" class="note"></p>
+        <div id="imageGrid" class="imageGrid"></div>
+        <label class="field"><span>Number of pieces</span><select id="difficultySelect"></select></label>
+        <button id="startButton" class="primary">🖼️ Start puzzle</button>
+        <button id="installButton" class="secondary hidden">⬇️ Add to Android home screen</button>
+      </section>
+
+      <section id="play" class="playArea hidden">
+        <div class="toolbar"><button id="picturesButton" class="secondary">Pictures</button><button id="shuffleButton" class="secondary">🔄 Shuffle</button></div>
+        <div id="board" class="board" aria-label="Puzzle board"></div>
+        <div id="win" class="win hidden">✅ Puzzle complete!</div>
+      </section>
+    </main>
+
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+      <section class="card stack advanced">
+        <h2>Advanced settings</h2>
+        <label class="field"><span>Gemini API key</span><input id="geminiKey" type="password" placeholder="Paste key here" /></label>
+        <label class="field"><span>Prompt for a custom puzzle</span><textarea id="prompt">a cozy watercolor garden with bright flowers</textarea></label>
+        <button id="generateButton" class="primary">✨ Generate puzzle</button>
+        <p id="message" class="note"></p>
+        <button id="closeModal" class="secondary">Close</button>
+      </section>
+    </div>
+
+    <script src="src/app.js" defer></script>
+  </body>
+</html>
