@@ -58,5 +58,5 @@ $('difficultySelect').addEventListener('change', e => difficulty = DIFFICULTIES.
 $('startButton').addEventListener('click', () => start()); $('shuffleButton').addEventListener('click', () => start()); $('picturesButton').addEventListener('click', () => { $('play').classList.add('hidden'); $('setup').classList.remove('hidden'); });
 $('settingsButton').addEventListener('click', () => $('modal').classList.remove('hidden')); $('closeModal').addEventListener('click', () => $('modal').classList.add('hidden')); $('generateButton').addEventListener('click', generateWithGemini); $('geminiKey').value = localStorage.getItem('geminiKey') || '';
 window.addEventListener('beforeinstallprompt', event => { event.preventDefault(); deferredPrompt = event; $('installButton').classList.remove('hidden'); }); $('installButton').addEventListener('click', () => deferredPrompt?.prompt());
-if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
 renderSetup();
