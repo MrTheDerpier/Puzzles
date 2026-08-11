@@ -1,53 +1,111 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#7c3aed" />
-    <meta name="description" content="A simple mobile-friendly jigsaw puzzle game with public domain image sources and optional Gemini prompt generation." />
-    <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="./icons/icon-192.svg" />
-    <link rel="stylesheet" href="./src/styles.css" />
-    <title>Pocket Puzzles</title>
-  </head>
-  <body>
-    <main class="app">
-      <header class="hero">
-        <div>
-          <p class="eyebrow">Pocket Puzzles</p>
-          <h1>Pick a picture. Make a puzzle.</h1>
-          <p>Big buttons, calm colors, and simple play for a quick relaxing break.</p>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#5b4bdb">
+  <meta name="description" content="A simple, relaxing picture puzzle game for phones.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/icon-192.svg">
+  <link rel="stylesheet" href="./src/styles.css">
+  <title>Pocket Puzzles</title>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <p class="brand">Pocket Puzzles</p>
+        <h1 id="pageTitle">Choose a picture</h1>
+      </div>
+      <button class="round-button" id="settingsButton" type="button" aria-label="Open settings">⚙️</button>
+    </header>
+
+    <section id="setupScreen" class="screen" aria-labelledby="pageTitle">
+      <div class="intro">
+        <p>Choose a picture and the number of pieces. Then tap two pieces to swap them.</p>
+      </div>
+
+      <div class="card source-card">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">1</span>
+            <h2>Pick a collection</h2>
+          </div>
+          <span id="sourceLicense" class="license"></span>
         </div>
-        <button id="settingsButton" class="iconButton" aria-label="Open advanced settings">⚙️</button>
-      </header>
+        <div id="sourceTabs" class="source-tabs" role="tablist" aria-label="Picture collections"></div>
+        <p id="sourceNote" class="helper"></p>
+        <div id="imageGrid" class="image-grid"></div>
+      </div>
 
-      <section id="setup" class="card stack">
-        <label class="field"><span>Image source</span><select id="sourceSelect"></select></label>
-        <p id="sourceNote" class="note"></p>
-        <div id="imageGrid" class="imageGrid"></div>
-        <label class="field"><span>Number of pieces</span><select id="difficultySelect"></select></label>
-        <button id="startButton" class="primary">🖼️ Start puzzle</button>
-        <button id="installButton" class="secondary hidden">⬇️ Add to Android home screen</button>
-      </section>
+      <div class="card">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">2</span>
+            <h2>How many pieces?</h2>
+          </div>
+        </div>
+        <div id="difficultyGrid" class="difficulty-grid" role="radiogroup" aria-label="Puzzle difficulty"></div>
+      </div>
 
-      <section id="play" class="playArea hidden">
-        <div class="toolbar"><button id="picturesButton" class="secondary">Pictures</button><button id="shuffleButton" class="secondary">🔄 Shuffle</button></div>
-        <div id="board" class="board" aria-label="Puzzle board"></div>
-        <div id="win" class="win hidden">✅ Puzzle complete!</div>
-      </section>
-    </main>
+      <button id="startButton" class="primary-button" type="button">Start puzzle</button>
+      <button id="installButton" class="secondary-button hidden" type="button">＋ Add to home screen</button>
+    </section>
 
-    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
-      <section class="card stack advanced">
-        <h2>Advanced settings</h2>
-        <label class="field"><span>Gemini API key</span><input id="geminiKey" type="password" placeholder="Paste key here" /></label>
-        <label class="field"><span>Prompt for a custom puzzle</span><textarea id="prompt">a cozy watercolor garden with bright flowers</textarea></label>
-        <button id="generateButton" class="primary">✨ Generate puzzle</button>
-        <p id="message" class="note"></p>
-        <button id="closeModal" class="secondary">Close</button>
-      </section>
-    </div>
+    <section id="playScreen" class="screen hidden" aria-labelledby="playTitle">
+      <div class="play-header">
+        <button id="backButton" class="text-button" type="button">‹ Pictures</button>
+        <div class="play-title">
+          <h2 id="playTitle">Puzzle</h2>
+          <span id="progressText">0 / 0</span>
+        </div>
+        <button id="shuffleButton" class="round-button small" type="button" aria-label="Shuffle pieces">🔀</button>
+      </div>
 
-    <script src="./src/app.js" defer></script>
-  </body>
+      <div id="instruction" class="instruction" role="status">Tap a piece, then tap another piece to swap them.</div>
+      <div id="board" class="board" role="grid" aria-label="Puzzle board"></div>
+
+      <div id="winPanel" class="win-panel hidden" role="status" aria-live="polite">
+        <div class="win-icon">✓</div>
+        <div>
+          <h2>Puzzle complete</h2>
+          <p id="winDetails">Nicely done.</p>
+        </div>
+        <button id="newPuzzleButton" class="primary-button" type="button">New puzzle</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-backdrop" data-close-settings></div>
+    <section class="modal-card">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Advanced</p>
+          <h2 id="settingsTitle">Settings</h2>
+        </div>
+        <button id="closeSettingsButton" class="round-button small" type="button" aria-label="Close settings">×</button>
+      </div>
+
+      <div class="settings-section">
+        <label class="field-label" for="geminiKey">Gemini API key</label>
+        <input id="geminiKey" class="text-input" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your API key">
+        <p class="helper">Your key is used only in this browser. It is not included in the app's source code.</p>
+      </div>
+
+      <div class="settings-section">
+        <label class="field-label" for="promptInput">Describe your picture</label>
+        <textarea id="promptInput" class="text-input prompt-input" rows="4">a peaceful garden with flowers and butterflies, painted in a warm watercolor style</textarea>
+        <button id="generateButton" class="primary-button" type="button">Create picture with Gemini</button>
+        <p id="settingsMessage" class="helper" role="status"></p>
+      </div>
+
+      <button id="doneSettingsButton" class="secondary-button" type="button">Done</button>
+    </section>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="./src/app.js" defer></script>
+</body>
 </html>
