@@ -1,12 +1,12 @@
 {
   "name": "Pocket Puzzles",
   "short_name": "Puzzles",
-  "description": "A simple, friendly puzzle game for phones.",
+  "description": "A simple, relaxing picture puzzle game for phones.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#fff7ed",
-  "theme_color": "#7c3aed",
+  "background_color": "#f6f4ff",
+  "theme_color": "#5b4bdb",
   "orientation": "portrait-primary",
   "icons": [
     { "src": "./icons/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
